@@ -34,7 +34,7 @@ public class MongoSingleton {
 			ApplicationResourcesLoader arl = new ApplicationResourcesLoader();
 			try {
 				MongoCredential credentials = MongoCredential.createMongoCRCredential(arl.getMongoDatabase(),arl.getMongoUsername(), arl.getMongoPassword().toCharArray());
-				mongoClient = new MongoClient(new ServerAddress(arl.getMongoUrl(),arl.getMongoPort()),Arrays.asList(credentials));
+				mongoClient = new MongoClient(new ServerAddress(arl.getMongoUrl()+arl.getMongoPort()),Arrays.asList(credentials));
 				db = mongoClient.getDB(arl.getMongoDatabase());
 				
 			} catch (UnknownHostException e) {

@@ -1,0 +1,16 @@
+ -- checker que le jdk 1.7 est bien installé sinon pb start tomcat
+ pour installer le jdk 1.7 sur debian ;
+ wget --no-cookies \
+--header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com" \
+"http://download.oracle.com/otn-pub/java/jdk/7/jdk-7-linux-x64.tar.gz" \
+-O /tmp/jdk-7-linux-x64.tar.gz --no-check-certificate
+
+puis:
+tar -xvf jdk*
+puis exporter la variable JAVA_HOME:
+export JAVA_HOME=/usr/local/jdk1.7.0/
+ 
+
+ 
+ -- tester la couverture de code avec cobertura
+ mvn clean cobertura:cobertura

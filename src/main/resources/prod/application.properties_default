@@ -1,0 +1,14 @@
+application.mongo.db=
+application.mongo.username=
+application.mongo.password=
+application.mongo.url=
+application.mongo.port=
+
+application.server.smtp=
+application.server.smtp.email=
+application.server.smtp.username=
+application.server.smtp.pass=
+application.server.smtp.starttls.enable=
+emailAdmin=
+dataloader.version=${version}
+mail.actif=true

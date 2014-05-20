@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+	<!-- beans des classes de jobs -->
+	<bean id="analyseDossierReceptionJobs" class="fr.inserm.server.jobs.AnalyseDossierReceptionJob" />
+
+	<bean id="analyseDossierReceptionJobsProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="targetName">
+			<value>analyseDossierReceptionJobs</value>
+		</property>
+	</bean>
+
+	<!-- bean des methodes de jobs -->
+	<bean id="analyseDossierReceptionJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="analyseDossierReceptionJobsProxy" />
+		<property name="targetMethod" value="analyseDossierReception" />
+	</bean>
+
+
+	<!-- triggers des methodes de jobs -->
+	<!-- heure serveur en gtm avec java -->
+	<!--<property name="cronExpression" value="0 50 15 * * ? *"/>15h50 tous 
+		les jours gmt soit 16h50 now -->
+	<!-- la duree d injection peut etre superieur a 1 minute par fichier, il 
+		faut lancer la tache d analyse tous les 15 minutes pour etre sûr de ne pas 
+		la lancer 2 fois sur les mêmes fichiers -->
+	<bean id="analyseDossierReceptionTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="analyseDossierReceptionJob" />
+
+		<property name="cronExpression" value="0 0/1 * * * ? *" />
+	</bean>
+
+	<!-- Jobs -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="analyseDossierReceptionTrigger" />
+			</list>
+		</property>
+	</bean>
+</beans>

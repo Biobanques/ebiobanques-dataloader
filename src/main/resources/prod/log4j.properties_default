@@ -1,0 +1,20 @@
+#definition du niveau et des Appender du rootLogger
+log4j.rootLogger=WARN,consoleAppender,mail
+ 
+#configuration de "monAppender"
+#nous allons envoyer les messages dans la console
+log4j.appender.consoleAppender=org.apache.log4j.ConsoleAppender
+#definition du Layout pour "monAppender"
+log4j.appender.consoleAppender.layout=org.apache.log4j.PatternLayout
+#definition du pattern d'affichage pour "monAppender"
+log4j.appender.consoleAppender.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{1}.%M] (line=%L) %m%n
+
+#configuration pour envoyer un email quand une erreur apparait dans les logs
+log4j.appender.mail=org.apache.log4j.net.SMTPAppender
+log4j.appender.mail.To=
+log4j.appender.mail.From=
+log4j.appender.mail.SMTPHost=localhost
+log4j.appender.mail.Threshold=ERROR
+log4j.appender.mail.BufferSize=1
+log4j.appender.mail.Subject=inserm-datalodare-webapp (V. ${version}): An application error occured 
+log4j.appender.mail.layout=org.apache.log4j.HTMLLayout

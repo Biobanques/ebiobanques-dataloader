@@ -10,26 +10,26 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
-import fr.inserm.server.model.Biobank;
+import fr.inserm.server.model.Contact;
 
 /**
- * DAO for biobank access to the object biobank
+ * DAO for contact access to the object contact
  * 
  * @author nmalservet.
  * 
  */
-public class BiobankDAO extends AbstractDAO {
+public class ContactDAO extends AbstractDAO {
 
-	private static final Logger LOGGER = Logger.getLogger(BiobankDAO.class);
+	private static final Logger LOGGER = Logger.getLogger(ContactDAO.class);
 
 	/**
-	 * return the entire list of biobank.
+	 * return the entire list of contact.
 	 * 
 	 * @return
 	 */
-	public List<Biobank> loadAll() {
-		List<Biobank> list = new ArrayList<Biobank>();
-		DBCollection coll = getCollection("biobank");
+	public List<Contact> loadAll() {
+		List<Contact> list = new ArrayList<Contact>();
+		DBCollection coll = getCollection("contact");
 		DBCursor cursor = coll.find();
 		try {
 			while (cursor.hasNext()) {
@@ -41,7 +41,7 @@ public class BiobankDAO extends AbstractDAO {
 				}
 			}
 		} catch (Exception ex) {
-			LOGGER.error("pb parcours biobank");
+			LOGGER.error("pb parcours contact");
 			ex.printStackTrace();
 		} finally {
 			cursor.close();
@@ -50,15 +50,15 @@ public class BiobankDAO extends AbstractDAO {
 	}
 
 	/**
-	 * return the entire list of biobank.
+	 * return the entire list of contact.
 	 * 
 	 * @return
 	 */
-	public Biobank load(String biobankId) {
-		Biobank result = null;
-		DBCollection coll = getCollection("biobank");
+	public Contact load(String contactId) {
+		Contact result = null;
+		DBCollection coll = getCollection("contact");
 		BasicDBObject query = new BasicDBObject(
-				Biobank.FieldsEnum.id.toString(), biobankId);
+				Contact.FieldsEnum.id.toString(), contactId);
 		DBCursor cursor = coll.find(query);
 		try {
 			while (cursor.hasNext()) {
@@ -66,7 +66,7 @@ public class BiobankDAO extends AbstractDAO {
 				result = dbObjectToPojo(dbObject);
 			}
 		} catch (Exception ex) {
-			LOGGER.error("pb parcours biobank");
+			LOGGER.error("pb parcours contact");
 		} finally {
 			cursor.close();
 		}
@@ -74,21 +74,21 @@ public class BiobankDAO extends AbstractDAO {
 	}
 
 	/**
-	 * get a biobank pojo from dbobject biobank.
+	 * get a contact pojo from dbobject contact.
 	 * 
 	 * @param dbObject
 	 * @return
 	 */
-	private Biobank dbObjectToPojo(DBObject dbObject) {
+	private Contact dbObjectToPojo(DBObject dbObject) {
 		if (dbObject != null) {
-			Biobank bbank = new Biobank();
-			for (Biobank.FieldsEnum field : Biobank.FieldsEnum.values()) {
+			Contact contact = new Contact();
+			for (Contact.FieldsEnum field : Contact.FieldsEnum.values()) {
 				Object object = dbObject.get(field.toString());
 				if (object != null) {
-					bbank.setValue(field, object.toString());
+					contact.setValue(field, object.toString());
 				}
 			}
-			return bbank;
+			return contact;
 		} else {
 			return null;
 		}

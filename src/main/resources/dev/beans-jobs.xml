@@ -20,8 +20,6 @@
 		<property name="targetObject" ref="analyseDossierReceptionJobsProxy" />
 		<property name="targetMethod" value="analyseDossierReception" />
 	</bean>
-
-
 	<!-- triggers des methodes de jobs -->
 	<!-- heure serveur en gtm avec java -->
 	<!--<property name="cronExpression" value="0 50 15 * * ? *"/>15h50 tous 
@@ -32,7 +30,7 @@
 	<bean id="analyseDossierReceptionTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="analyseDossierReceptionJob" />
 
-		<property name="cronExpression" value="0 0/1 * * * ? *" />
+		<property name="cronExpression" value="0 0/5 * * * ? *" />
 	</bean>
 
 	<!-- Jobs -->
@@ -40,6 +38,50 @@
 		<property name="triggers">
 			<list>
 				<ref bean="analyseDossierReceptionTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Trigger de verification de la presence de nouveaux fichiers dans les dossiers de reception	 -->
+	
+	<!-- beans des classes de jobs -->
+	<bean id="checkReceptionFoldersJobs" class="fr.inserm.server.jobs.CheckReceptionFoldersJob" />
+
+	<bean id="checkReceptionFoldersJobsProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="targetName">
+			<value>checkReceptionFoldersJobs</value>
+		</property>
+	</bean>
+
+	<!-- bean des methodes de jobs -->
+	<bean id="checkReceptionFoldersJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="checkReceptionFoldersJobsProxy" />
+		<property name="targetMethod" value="checkReceptionFolders" />
+	</bean>
+	
+	
+	
+
+
+	<!-- triggers des methodes de jobs -->
+	<!-- heure serveur en gtm avec java -->
+	<!--<property name="cronExpression" value="0 50 15 * * ? *"/>15h50 tous 
+		les jours gmt soit 16h50 now -->
+	<!-- la duree d injection peut etre superieur a 1 minute par fichier, il 
+		faut lancer la tache d analyse tous les 15 minutes pour etre sûr de ne pas 
+		la lancer 2 fois sur les mêmes fichiers -->
+	<bean id="checkReceptionFoldersTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="checkReceptionFoldersJob" />
+
+		<property name="cronExpression" value="0/30 * * * * ? *" />
+	</bean>
+
+	<!-- Jobs -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="checkReceptionFoldersTrigger" />
 			</list>
 		</property>
 	</bean>

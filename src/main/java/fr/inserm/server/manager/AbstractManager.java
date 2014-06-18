@@ -1,7 +1,9 @@
 package fr.inserm.server.manager;
 
 import fr.inserm.server.dao.BiobankDAO;
+import fr.inserm.server.dao.ContactDAO;
 import fr.inserm.server.dao.EchantillonDAO;
+import fr.inserm.server.dao.FileDetectedDAO;
 import fr.inserm.server.dao.FileImportedDAO;
 
 /**
@@ -17,6 +19,9 @@ public class AbstractManager {
 	private static BiobankDAO biobankDao;
 
 	private static FileImportedDAO fileImportedDao;
+	private static ContactDAO contactDao;
+
+	private static FileDetectedDAO fileDetectedDao;
 
 	public static BiobankDAO getBiobankDao() {
 		return biobankDao;
@@ -40,6 +45,22 @@ public class AbstractManager {
 
 	public void setFileImportedDao(FileImportedDAO fileImportedDao) {
 		AbstractManager.fileImportedDao = fileImportedDao;
+	}
+
+	public static ContactDAO getContactDao() {
+		return contactDao;
+	}
+
+	public void setContactDao(ContactDAO contactDao) {
+		AbstractManager.contactDao = contactDao;
+	}
+
+	public static FileDetectedDAO getFileDetectedDao() {
+		return fileDetectedDao;
+	}
+
+	public static void setFileDetectedDao(FileDetectedDAO fileDetectedDao) {
+		AbstractManager.fileDetectedDao = fileDetectedDao;
 	}
 
 }

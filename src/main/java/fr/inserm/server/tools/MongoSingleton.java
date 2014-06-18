@@ -11,8 +11,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
 /**
- * singleton pour ne pas avoir trop de "connexion ouverte" sur la base mongo et obtenir une erreur de type :
- * "too many files opened"<br>
+ * singleton pour ne pas avoir trop de "connexion ouverte" sur la base mongo et
+ * obtenir une erreur de type : "too many files opened"<br>
  * TODO ameliorer via un singleton njecter avec spring?
  * 
  * @author nmalservet
@@ -33,10 +33,16 @@ public class MongoSingleton {
 			MongoClient mongoClient;
 			ApplicationResourcesLoader arl = new ApplicationResourcesLoader();
 			try {
-				MongoCredential credentials = MongoCredential.createMongoCRCredential(arl.getMongoDatabase(),arl.getMongoUsername(), arl.getMongoPassword().toCharArray());
-				mongoClient = new MongoClient(new ServerAddress(arl.getMongoUrl()+arl.getMongoPort()),Arrays.asList(credentials));
+				MongoCredential credentials = MongoCredential
+						.createMongoCRCredential(arl.getMongoUsername(), arl
+								.getMongoDatabase(), arl.getMongoPassword()
+								.toCharArray());
+				mongoClient = new MongoClient(
+						new ServerAddress(arl.getMongoUrl(),
+								Integer.parseInt(arl.getMongoPort())),
+						Arrays.asList(credentials));
 				db = mongoClient.getDB(arl.getMongoDatabase());
-				
+
 			} catch (UnknownHostException e) {
 				LOGGER.error("error get collection:" + e.getMessage());
 			}

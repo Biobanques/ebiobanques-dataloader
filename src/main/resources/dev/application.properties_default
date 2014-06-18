@@ -10,6 +10,7 @@ application.server.smtp.username=
 application.server.smtp.pass=
 application.server.smtp.starttls.enable=
 emailAdmin=
+emailTest=
 
 dataloader.version=${version}
 mail.actif=false

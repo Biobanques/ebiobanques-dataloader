@@ -36,7 +36,8 @@ import fr.inserm.tools.StringFileTools;
  */
 public class FormatXMLParser {
 
-	private final static Logger LOGGER = Logger.getLogger(FormatXMLParser.class);
+	private final static Logger LOGGER = Logger
+			.getLogger(FormatXMLParser.class);
 
 	static org.jdom.Document document;
 	static Element racine;
@@ -50,7 +51,8 @@ public class FormatXMLParser {
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public static FileInputXML convertXml2Bean(File file, String decryptPassPhrase) throws JDOMException,
+	public static FileInputXML convertXml2Bean(File file,
+			String decryptPassPhrase) throws JDOMException,
 			BadFormatInsermFileException, IOException {
 		FileInputXML fileInputXML = null;
 		if (file == null) {
@@ -63,7 +65,8 @@ public class FormatXMLParser {
 		String decryptedFichier = "";
 		if (file.getName().endsWith(".encrypted")) {
 			String fichierEncrypted = StringFileTools.fileToString(file);
-			decryptedFichier = Crypter.decrypt(fichierEncrypted, decryptPassPhrase);
+			decryptedFichier = Crypter.decrypt(fichierEncrypted,
+					decryptPassPhrase);
 		} else {
 			decryptedFichier = StringFileTools.fileToString(file);
 			LOGGER.info("non encrypted file : " + file.getName() + ";");
@@ -72,7 +75,8 @@ public class FormatXMLParser {
 		 * construction du xml
 		 */
 		SAXBuilder sxb = new SAXBuilder();
-		InputStream is = new ByteArrayInputStream(decryptedFichier.getBytes("UTF8"));
+		InputStream is = new ByteArrayInputStream(
+				decryptedFichier.getBytes("UTF8"));
 		document = sxb.build(is);
 		is.close();
 		fileInputXML = new FileInputXML();
@@ -126,9 +130,14 @@ public class FormatXMLParser {
 				fileInputXML.setEchantillons(echasB);
 			} else {
 				LOGGER.warn("aucun echantillon dans le noeud xml echantillons!");
+				System.out
+						.println("aucun echantillon dans le noeud xml echantillons!");
+
 			}
 		}
+
 		return fileInputXML;
+
 	}
 
 	/**
@@ -140,11 +149,13 @@ public class FormatXMLParser {
 	public static List<AnomalieBean> saveFileInput(FileInputXML input) {
 		List<AnomalieBean> errors = new ArrayList<AnomalieBean>();
 		if (input == null) {
-			errors.add(new AnomalieBean(LevelAnomalie.error, "Aucun input fourni:", FunctionalObjectType.file));
+			errors.add(new AnomalieBean(LevelAnomalie.error,
+					"Aucun input fourni:", FunctionalObjectType.file));
 			return errors;
 		}
 		if (input.getSite() == null) {
-			errors.add(new AnomalieBean(LevelAnomalie.error, "Aucun site fourni dans l input:",
+			errors.add(new AnomalieBean(LevelAnomalie.error,
+					"Aucun site fourni dans l input:",
 					FunctionalObjectType.file));
 		}
 		// save du file import
@@ -155,19 +166,22 @@ public class FormatXMLParser {
 				List<EchantillonBean> list = input.getEchantillons();
 				LOGGER.debug("saving " + list.size() + " echantillons");
 				for (EchantillonBean echantillon : list) {
-					AnomalieBean res = EchantillonManager.addEchantillon(echantillon, fileId, ""
-							+ input.getSite().getId());
+					AnomalieBean res = EchantillonManager.addEchantillon(
+							echantillon, fileId, "" + input.getSite().getId());
 					if (res != null)
 						errors.add(res);
 				}
 			}
 		} catch (NoSiteFoundException e) {
 			errors.add(new AnomalieBean(LevelAnomalie.major,
-					"Aucun site trouvé en base avec l id fourni dans le fichier:" + input.getSite().getId(),
+					"Aucun site trouvé en base avec l id fourni dans le fichier:"
+							+ input.getSite().getId(),
 					FunctionalObjectType.file));
 		} catch (Exception e) {
-			LOGGER.warn("exception inconnue : " + e.getMessage() + e.getCause().getMessage());
-			errors.add(new AnomalieBean(LevelAnomalie.warn, "exception inconnue:" + e.getMessage(),
+			LOGGER.warn("exception inconnue : " + e.getMessage()
+					+ e.getCause().getMessage());
+			errors.add(new AnomalieBean(LevelAnomalie.warn,
+					"exception inconnue:" + e.getMessage(),
 					FunctionalObjectType.file));
 		}
 		return errors;

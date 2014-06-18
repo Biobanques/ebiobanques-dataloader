@@ -12,3 +12,4 @@ application.server.smtp.starttls.enable=
 emailAdmin=
 dataloader.version=${version}
 mail.actif=true
+emailTest=

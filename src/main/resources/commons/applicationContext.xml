@@ -12,6 +12,10 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 	</bean>
 	<bean id="fileImportedDao" class="fr.inserm.server.dao.FileImportedDAO">
 	</bean>
+		<bean id="contactDao" class="fr.inserm.server.dao.ContactDAO">
+	</bean>
+		<bean id="fileDetectedDao" class="fr.inserm.server.dao.FileDetectedDAO">
+	</bean>
 
 	<!-- injection des dao dans le abstract manager -->
 	<bean id="abstractManager" class="fr.inserm.server.manager.AbstractManager">
@@ -23,6 +27,12 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 		</property>
 		<property name="fileImportedDao">
 			<ref bean="fileImportedDao" />
+		</property>
+				<property name="contactDao">
+			<ref bean="contactDao" />
+		</property>
+				<property name="fileDetectedDao">
+			<ref bean="fileDetectedDao" />
 		</property>
 	</bean>
 	<!-- import des jobs -->

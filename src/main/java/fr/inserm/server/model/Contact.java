@@ -1,10 +1,10 @@
 package fr.inserm.server.model;
 
-//@Table(name = "biobank")
-public class Biobank extends AbstractModel {
+//@Table(name = "contact")
+public class Contact extends AbstractModel {
 
 	public enum FieldsEnum {
-		id, identifier, name, collection_name, collection_id, folder_reception, folder_done, passphrase, contact_id;
+		id, first_name, last_name, email, pays, code_postal, inactive;
 	}
 
 	public String getValue(FieldsEnum key) {
@@ -15,8 +15,7 @@ public class Biobank extends AbstractModel {
 		setValue(key.toString(), value);
 	}
 
-	public Biobank() {
+	public Contact() {
 	}
 
-	public int flag = 0;
 }

@@ -2,25 +2,27 @@ package fr.inserm.server;
 
 import java.util.Date;
 
-import junit.framework.TestCase;
-
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 
+import fr.inserm.server.tools.AbstractTest;
 import fr.inserm.server.tools.MongoSingleton;
 import fr.inserm.tools.DurationAnalyzer;
 
-public class Test extends TestCase {
+@Ignore
+public class Test extends AbstractTest {
 
 	private static final Logger LOGGER = Logger.getLogger(Test.class);
 
 	/**
 	 * @param args
 	 */
-	public void testInsertMassiveSamples() {
+
+	public void insertMassiveSamplesTest() {
 		DurationAnalyzer da = new DurationAnalyzer();
 		int biobankid = 0;
 		insertMassiveSamples(1000);
@@ -37,6 +39,7 @@ public class Test extends TestCase {
 	 * 
 	 * @param n
 	 */
+
 	private void insertMassiveSamples(int n) {
 		DBCollection coll = getCollection();
 		Date date = new Date();
@@ -48,9 +51,13 @@ public class Test extends TestCase {
 				consent = "N";
 			}
 			int idbiobank = i % 2;
-			BasicDBObject doc = new BasicDBObject("id_depositor", "nm_java").append("id_sample", randomid)
-					.append("consent_ethical", consent).append("biobank_id", idbiobank)
-					.append("notes", new BasicDBObject("maladie", "alz").append("note2", "352"));
+			BasicDBObject doc = new BasicDBObject("id_depositor", "nm_java")
+					.append("id_sample", randomid)
+					.append("consent_ethical", consent)
+					.append("biobank_id", idbiobank)
+					.append("notes",
+							new BasicDBObject("maladie", "alz").append("note2",
+									"352"));
 
 			coll.insert(doc);
 		}
@@ -71,7 +78,8 @@ public class Test extends TestCase {
 		BasicDBObject query2 = new BasicDBObject("consent_ethical", "N");
 		query2.append("biobank_id", biobankid);
 		DBCursor cursor2 = coll.find(query2);
-		LOGGER.debug("nb  d echa sans consent et de la biobank :" + cursor2.count());
+		LOGGER.debug("nb  d echa sans consent et de la biobank :"
+				+ cursor2.count());
 		Date date2 = new Date();
 		LOGGER.debug("end search:" + date2.toString());
 	}
@@ -90,12 +98,12 @@ public class Test extends TestCase {
 	}
 
 	private DBCollection getCollection() {
-	//	MongoClient mongoClient;
+		// MongoClient mongoClient;
 		try {
 			return MongoSingleton.getDb().getCollection("echantillons");
-//			mongoClient = new MongoClient();
-//			DB db = mongoClient.getDB("interop");
-//			return db.getCollection("echantillons");
+			// mongoClient = new MongoClient();
+			// DB db = mongoClient.getDB("interop");
+			// return db.getCollection("echantillons");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,7 +120,8 @@ public class Test extends TestCase {
 		BasicDBObject update = new BasicDBObject("consent_ethical", "Y");
 		coll.update(query, update);// update one only
 		/**
-		 * update multi est specifique et doit etre effectué avec des criteres specifiques
+		 * update multi est specifique et doit etre effectué avec des criteres
+		 * specifiques
 		 */
 		// coll.updateMulti(query, update);// update all
 		Date date2 = new Date();

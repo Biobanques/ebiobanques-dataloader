@@ -1,9 +1,9 @@
 package fr.inserm.server.tools;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class StringValidatorTest extends TestCase {
-
+public class StringValidatorTest extends AbstractTest {
+	@Test
 	public final void testTruncate() {
 		/**
 		 * tests de substring

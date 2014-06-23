@@ -125,10 +125,10 @@ public class MailTools {
 				+ listToHTMLList(filesSaved)
 				+ "</ul><br><b> Nombre d'&eacute;chantillons ins&eacute;r&eacute;s : </b>"
 				+ nbech;
-		if (filesUnsaved.size() > 0)
+		if (filesUnsaved != null && filesUnsaved.size() > 0)
 			mailContent += "<br><b>Liste de fichiers avec erreurs:</b><br><ul>"
 					+ listToHTMLList(filesUnsaved);
-		if (logsFiles.size() > 0)
+		if (logsFiles != null && logsFiles.size() > 0)
 			mailContent += "</ul><br><b>Liste de fichiers de log</b>:<ul>"
 					+ listToHTMLList(logsFiles);
 		mailContent += "</ul>"
@@ -172,9 +172,18 @@ public class MailTools {
 	 * 
 	 * @param email
 	 * @param newFiles
+	 * @throws Exception
 	 */
 	public static void sendEmailConfirmReception(String email,
-			List<String> newFiles) {
+			List<String> newFiles) throws Exception {
+		if (email == null) {
+			LOGGER.warn("Pas d'email indiqué, l'email sera transmis à l'administrateur système");
+			email = emailAdmin;
+		}
+		if (newFiles == null || newFiles.size() == 0) {
+			LOGGER.warn("Pas de nouveaux fichiers, envoi d'email inutile");
+			throw new Exception("Erreur sur la liste de fichiers");
+		}
 		String mailSubject = "Confirmation de reception de " + newFiles.size()
 				+ " fichiers sur ebiobanques.fr";
 		String mailContent = "<p>"

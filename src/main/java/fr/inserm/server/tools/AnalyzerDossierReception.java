@@ -39,7 +39,7 @@ import fr.inserm.tools.StringFileTools;
  */
 public class AnalyzerDossierReception extends AbstractManager {
 
-	private static final Logger LOGGER = Logger
+	static final Logger LOGGER = Logger
 			.getLogger(AnalyzerDossierReception.class);
 
 	private AnalyzerDossierReception() {

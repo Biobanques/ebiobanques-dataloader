@@ -37,7 +37,8 @@ public class FileImportedDAOTest extends AbstractTest {
 	public void testGetFilesImportedByExtractionId() {
 		FileImportedDAO dao = new FileImportedDAO();
 		// cas qui marche
-		List<FileImported> files = dao.getFilesImportedByExtractionId("2013-07-26T02:00:54-0700");
+		List<FileImported> files = dao
+				.getFilesImportedByExtractionId("2013-07-26T02:00:54-0700");
 		assertNotNull(files);
 		assertEquals(4, files.size());
 		// cas extraction id inexistant
@@ -51,24 +52,30 @@ public class FileImportedDAOTest extends AbstractTest {
 		FileImportedDAO dao = new FileImportedDAO();
 		// cas qui retourne des fichiers
 		String extractionID = "2013-07-26T02:00:54-0700";
-		List<FileImported> files = dao.getFilesImportedByBiobankExceptExtractionId(biobankId, extractionID);
+		List<FileImported> files = dao
+				.getFilesImportedByBiobankExceptExtractionId(biobankId,
+						extractionID);
 		assertNotNull(files);
 		assertTrue(files.size() > 0);
 		for (FileImported file : files) {
-			assertEquals(biobankId, file.getValue(FileImported.FieldsEnum.biobank_id));
-			assertNotSame(extractionID, file.getValue(FileImported.FieldsEnum.extraction_id));
+			assertEquals(biobankId,
+					file.getValue(FileImported.FieldsEnum.biobank_id));
+			assertNotSame(extractionID,
+					file.getValue(FileImported.FieldsEnum.extraction_id));
 		}
 		// cas qui ne retourne aucun fichier
-		files = dao.getFilesImportedByBiobankExceptExtractionId("18", "2013-07-26T02:07:54-0700");
+		files = dao.getFilesImportedByBiobankExceptExtractionId("18",
+				"2013-07-26T02:07:54-0700");
 		assertNotNull(files);
 		assertEquals(0, files.size());
 	}
 
 	/**
 	 * test du save. <br>
-	 * TODO : ajouter des controles pre insert pour ameliorer le contenu des données. <br>
-	 * NB : les données sont ajoutées en base donc ne pas effectuer de tests sur uen base de prod car ke jeu de données
-	 * sera modifié.
+	 * TODO : ajouter des controles pre insert pour ameliorer le contenu des
+	 * données. <br>
+	 * NB : les données sont ajoutées en base donc ne pas effectuer de tests sur
+	 * uen base de prod car ke jeu de données sera modifié.
 	 */
 	@Test
 	public void testSave() {
@@ -79,6 +86,7 @@ public class FileImportedDAOTest extends AbstractTest {
 		assertNotNull(id);
 		FileImported fi = dao.getLastFileImported(biobankInexisting);
 		assertNotNull(fi);
-		assertEquals(fi.getValue(FileImported.FieldsEnum.biobank_id), biobankInexisting);
+		assertEquals(fi.getValue(FileImported.FieldsEnum.biobank_id),
+				biobankInexisting);
 	}
 }

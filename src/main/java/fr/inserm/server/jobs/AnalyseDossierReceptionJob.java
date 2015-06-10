@@ -12,7 +12,8 @@ public class AnalyseDossierReceptionJob {
 	public AnalyseDossierReceptionJob() {
 	}
 
-	private static final Logger LOGGER = Logger.getLogger(AnalyseDossierReceptionJob.class);
+	private static final Logger LOGGER = Logger
+			.getLogger(AnalyseDossierReceptionJob.class);
 
 	/**
 	 * <p>

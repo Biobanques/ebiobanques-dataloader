@@ -21,7 +21,8 @@ import fr.inserm.server.model.FileImported;
  */
 public class FileImportedDAO extends AbstractDAO {
 
-	private final static Logger LOGGER = Logger.getLogger(FileImportedDAO.class);
+	private final static Logger LOGGER = Logger
+			.getLogger(FileImportedDAO.class);
 
 	private static String collectionName = "file_imported";
 
@@ -33,7 +34,8 @@ public class FileImportedDAO extends AbstractDAO {
 	public FileImported getLastFileImported(String biobankId) {
 		FileImported result = null;
 		DBCollection coll = getCollection(collectionName);
-		BasicDBObject query = new BasicDBObject(FileImported.FieldsEnum.biobank_id.toString(), biobankId);
+		BasicDBObject query = new BasicDBObject(
+				FileImported.FieldsEnum.biobank_id.toString(), biobankId);
 		DBCursor cursor = coll.find(query);
 		try {
 			while (cursor.hasNext()) {
@@ -58,7 +60,8 @@ public class FileImportedDAO extends AbstractDAO {
 	public List<FileImported> getFilesImportedByExtractionId(String extractionId) {
 		List<FileImported> list = new ArrayList<FileImported>();
 		DBCollection coll = getCollection(collectionName);
-		BasicDBObject query = new BasicDBObject(FileImported.FieldsEnum.extraction_id.toString(), extractionId);
+		BasicDBObject query = new BasicDBObject(
+				FileImported.FieldsEnum.extraction_id.toString(), extractionId);
 		DBCursor cursor = coll.find(query);
 		try {
 			while (cursor.hasNext()) {
@@ -74,15 +77,18 @@ public class FileImportedDAO extends AbstractDAO {
 	}
 
 	/**
-	 * return the entire list of files for one biobank but witout this extraction id
+	 * return the entire list of files for one biobank but witout this
+	 * extraction id
 	 * 
 	 * @return
 	 */
-	public List<FileImported> getFilesImportedByBiobankExceptExtractionId(String biobankId, String extractionId) {
+	public List<FileImported> getFilesImportedByBiobankExceptExtractionId(
+			String biobankId, String extractionId) {
 		List<FileImported> list = new ArrayList<FileImported>();
 		DBCollection coll = getCollection(collectionName);
-		BasicDBObject query = new BasicDBObject(FileImported.FieldsEnum.extraction_id.toString(), new BasicDBObject(
-				"$ne", extractionId));
+		BasicDBObject query = new BasicDBObject(
+				FileImported.FieldsEnum.extraction_id.toString(),
+				new BasicDBObject("$ne", extractionId));
 		query.put(FileImported.FieldsEnum.biobank_id.toString(), biobankId);
 		DBCursor cursor = coll.find(query);
 		try {

@@ -1,6 +1,5 @@
 package fr.inserm.server.model;
 
-
 //@Table(name = "fileDetected")
 public class FileDetected extends AbstractModel {
 

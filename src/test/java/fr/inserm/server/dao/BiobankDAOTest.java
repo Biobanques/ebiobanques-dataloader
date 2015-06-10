@@ -32,7 +32,9 @@ public class BiobankDAOTest extends AbstractTest {
 		assertTrue(biobanks.size() > 0);
 		// test que les dossiers sont bien recuperes
 		for (Biobank biobank : biobanks) {
-			assertNotNull("biobank folder done is null:" + biobank.getValue(Biobank.FieldsEnum.id),
+			assertNotNull(
+					"biobank folder done is null:"
+							+ biobank.getValue(Biobank.FieldsEnum.id),
 					biobank.getValue(Biobank.FieldsEnum.folder_done));
 		}
 	}
@@ -42,7 +44,8 @@ public class BiobankDAOTest extends AbstractTest {
 		BiobankDAO dao = new BiobankDAO();
 		Biobank biobank = dao.load("1");
 		assertNotNull(biobank);
-		assertEquals(biobank.getValue(Biobank.FieldsEnum.identifier), "LPCE BioBank");
+		assertEquals(biobank.getValue(Biobank.FieldsEnum.identifier),
+				"LPCE BioBank");
 	}
 
 }

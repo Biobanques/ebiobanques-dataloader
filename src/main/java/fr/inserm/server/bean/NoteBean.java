@@ -1,7 +1,6 @@
 package fr.inserm.server.bean;
 
-
-public class NoteBean  {
+public class NoteBean {
 
 	private int id;
 

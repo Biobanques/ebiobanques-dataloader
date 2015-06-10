@@ -4,19 +4,21 @@ import java.util.Date;
 
 /**
  * bean de stockage des informations liees a une anomalie.
+ * 
  * @author nicolas
- *
+ * 
  */
 public class AnomalieBean {
 
-	public AnomalieBean(LevelAnomalie lev, String mess, FunctionalObjectType typ, Date dat) {
+	public AnomalieBean(LevelAnomalie lev, String mess,
+			FunctionalObjectType typ, Date dat) {
 
 		message = mess;
 		level = lev;
 		type = typ;
 		date = dat;
 	}
-	
+
 	public AnomalieBean(LevelAnomalie lev, String mess, FunctionalObjectType typ) {
 
 		message = mess;

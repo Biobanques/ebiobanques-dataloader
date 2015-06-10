@@ -32,8 +32,7 @@ public class MailTools {
 	}
 
 	// private static String emailAdmin = "nicolas@malservet.eu";
-	private static String emailAdmin = new ApplicationResourcesLoader()
-			.getEmailAdmin();
+	private static String emailAdmin = new ApplicationResourcesLoader().getEmailAdmin();
 
 	private static String footerMail = "<br><i>Pour toute question ou probl&egrave;me rencontr&eacute;, veuillez contacter l'administrateur syst&egrave;me &agrave; l'adresse : <a href=mailto:\""
 			+ emailAdmin + "\">" + emailAdmin + "</a>" + "</i>";
@@ -49,18 +48,12 @@ public class MailTools {
 	 * @param filesName
 	 *            : liste of files in a string
 	 */
-	public static boolean sendMailNotifyStart(long id, int fileNumber,
-			String filesName) {
+	public static boolean sendMailNotifyStart(long id, int fileNumber, String filesName) {
 
-		return MailTools
-				.sendEmail(
-						emailAdmin,
-						"D&eacute;marrage de l'analyse des fichiers: AnalyseId:"
-								+ id,
-						"<h1>Notification de d&eacute;marrage d'analyse des fichiers</h1><br><b>Nombre de fichiers &agrave; traiter</b>:"
-								+ fileNumber
-								+ "<br> Liste des fichiers receptionn&eacute;s:<ul>"
-								+ filesName + "</ul>" + footerMail);
+		return MailTools.sendEmail(emailAdmin, "D&eacute;marrage de l'analyse des fichiers: AnalyseId:" + id,
+				"<h1>Notification de d&eacute;marrage d'analyse des fichiers</h1><br><b>Nombre de fichiers &agrave; traiter</b>:"
+						+ fileNumber + "<br> Liste des fichiers receptionn&eacute;s:<ul>" + filesName + "</ul>"
+						+ footerMail);
 	}
 
 	/**
@@ -73,9 +66,8 @@ public class MailTools {
 	 * @param alerteAno
 	 *            : message sur lers anomalies
 	 */
-	public static boolean sendMailNotifyEnd(long id, String tempsTraitement,
-			List<AnomalieBean> anomalies, String biobankName, int numberFiles,
-			List<String> filesName, List<String> filesSaved,
+	public static boolean sendMailNotifyEnd(long id, String tempsTraitement, List<AnomalieBean> anomalies,
+			String biobankName, int numberFiles, List<String> filesName, List<String> filesSaved,
 			List<String> filesUnsaved, List<String> logsFiles, int nbech) {
 
 		String alertAno = "<font color=\"#347235\">Aucune anomalie n'a &eacute;t&eacute; d&eacute;tect&eacute;e;</font>";
@@ -85,8 +77,7 @@ public class MailTools {
 					+ anomalies.size();
 			alertAno += "<table><th><td>Level</td><td>Categorie</td><td>Date</td><td>Message</td></th>";
 			for (AnomalieBean ano : anomalies) {
-				alertAno += "<tr><td>" + ano.getLevel() + "</td><td>"
-						+ ano.getType() + "</td><td>" + ano.getDate()
+				alertAno += "<tr><td>" + ano.getLevel() + "</td><td>" + ano.getType() + "</td><td>" + ano.getDate()
 						+ "</td><td>" + ano.getMessage() + "</td></tr>";
 			}
 			alertAno += "</table><br> Veuillez contacter l'administrateur syst&egrave;me &agrave; l'adresse : <a href=mailto:\""
@@ -126,16 +117,13 @@ public class MailTools {
 				+ "</ul><br><b> Nombre d'&eacute;chantillons ins&eacute;r&eacute;s : </b>"
 				+ nbech;
 		if (filesUnsaved != null && filesUnsaved.size() > 0)
-			mailContent += "<br><b>Liste de fichiers avec erreurs:</b><br><ul>"
-					+ listToHTMLList(filesUnsaved);
+			mailContent += "<br><b>Liste de fichiers avec erreurs:</b><br><ul>" + listToHTMLList(filesUnsaved);
 		if (logsFiles != null && logsFiles.size() > 0)
-			mailContent += "</ul><br><b>Liste de fichiers de log</b>:<ul>"
-					+ listToHTMLList(logsFiles);
+			mailContent += "</ul><br><b>Liste de fichiers de log</b>:<ul>" + listToHTMLList(logsFiles);
 		mailContent += "</ul>"
 				+ "<br><b>Site de pr&eacute;sentation des donn&eacute;es :</b> <a href=\"http://ebiobanques.fr\">ebiobanques.fr</a><br>"
 				+ footerMail;
-		boolean mailToAdmin = MailTools.sendEmail(emailAdmin, mailSubject,
-				mailContent);
+		boolean mailToAdmin = MailTools.sendEmail(emailAdmin, mailSubject, mailContent);
 		/*
 		 * FIXME : fonctionnalité à débloquer si process hyper robuste Envoi du
 		 * rapport à l'utilisateur si identifié dans les données de la Biobank
@@ -174,8 +162,7 @@ public class MailTools {
 	 * @param newFiles
 	 * @throws Exception
 	 */
-	public static void sendEmailConfirmReception(String email,
-			List<String> newFiles) throws Exception {
+	public static void sendEmailConfirmReception(String email, List<String> newFiles) throws Exception {
 		if (email == null) {
 			LOGGER.warn("Pas d'email indiqué, l'email sera transmis à l'administrateur système");
 			email = emailAdmin;
@@ -184,19 +171,13 @@ public class MailTools {
 			LOGGER.warn("Pas de nouveaux fichiers, envoi d'email inutile");
 			throw new Exception("Erreur sur la liste de fichiers");
 		}
-		String mailSubject = "Confirmation de reception de " + newFiles.size()
-				+ " fichiers sur ebiobanques.fr";
-		String mailContent = "<p>"
-				+ newFiles.size()
-				+ " fichiers ont été réceptionnés sur le serveur ebiobanques.fr. </p>"
-				+ "<ul>"
-				+ listToHTMLList(newFiles)
-				+ "</ul>"
-				+ "<p>Ils seront traités et insérés dans la base de données très prochainement</p>"
-				+ "<br>" + "<br>" + "<p>" + newFiles.size()
-				+ " files was received on our server. </p>" + "<ul>"
+		String mailSubject = "Confirmation de reception de " + newFiles.size() + " fichiers sur ebiobanques.fr";
+		String mailContent = "<p>" + newFiles.size()
+				+ " fichiers ont été réceptionnés sur le serveur ebiobanques.fr. </p>" + "<ul>"
 				+ listToHTMLList(newFiles) + "</ul>"
-				+ "<p>They will be inserted in our database soon.</p>"
+				+ "<p>Ils seront traités et insérés dans la base de données très prochainement</p>" + "<br>" + "<br>"
+				+ "<p>" + newFiles.size() + " files was received on our server. </p>" + "<ul>"
+				+ listToHTMLList(newFiles) + "</ul>" + "<p>They will be inserted in our database soon.</p>"
 				+ footerMail;
 		sendEmail(email, mailSubject, mailContent);
 		// sendEmail(emailAdmin, mailSubject, mailContent);
@@ -220,34 +201,35 @@ public class MailTools {
 			to = app.getEmailTest();
 			LOGGER.info("Mail system desactivated. Message send to test adress test-contact@ebiobanques.fr");
 		}
-		props.put("mail.smtp.host", app.getServerSmtp());
-		props.put("mail.from", app.getSmtpEmail());
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", app.isStarttls());
+		if (app.sendMailsDuringTests) {
+			props.put("mail.smtp.host", app.getServerSmtp());
+			props.put("mail.from", app.getSmtpEmail());
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", app.isStarttls());
 
-		Session session = Session.getInstance(props,
-				new javax.mail.Authenticator() {
-					@Override
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(app.getSmtpEmail(),
-								app.getSmtpPass());
-					}
-				});
-		MimeMessage message = new MimeMessage(session);
-		try {
-			InternetAddress dest = new InternetAddress(to);
-			message.addRecipient(Message.RecipientType.TO, dest);
-			message.setSubject(subject, "utf-8");
-			message.setFrom(new InternetAddress(app.getSmtpEmail()));
-			message.setSentDate(new Date());
-			message.setContent(content, "text/html; charset=utf-8");
-			Transport.send(message);
+			Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(app.getSmtpEmail(), app.getSmtpPass());
+				}
+			});
+			MimeMessage message = new MimeMessage(session);
+			try {
+				InternetAddress dest = new InternetAddress(to);
+				message.addRecipient(Message.RecipientType.TO, dest);
+				message.setSubject(subject, "utf-8");
+				message.setFrom(new InternetAddress(app.getSmtpEmail()));
+				message.setSentDate(new Date());
+				message.setContent(content, "text/html; charset=utf-8");
+				Transport.send(message);
+				return true;
+			} catch (Exception ex) {
+				LOGGER.error("Cannot send email. " + ex.getMessage());
+				ex.printStackTrace();
+			}
+
+			return false;
+		} else
 			return true;
-		} catch (Exception ex) {
-			LOGGER.error("Cannot send email. " + ex.getMessage());
-			ex.printStackTrace();
-		}
-
-		return false;
 	}
 }

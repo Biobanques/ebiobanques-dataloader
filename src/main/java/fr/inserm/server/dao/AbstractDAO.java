@@ -5,7 +5,8 @@ import com.mongodb.DBCollection;
 import fr.inserm.server.tools.MongoSingleton;
 
 /**
- * classe abstraite de dao pour factorsier les methodes des daos d acces aux tables.
+ * classe abstraite de dao pour factorsier les methodes des daos d acces aux
+ * tables.
  * 
  * @author nicolas
  * 
@@ -13,7 +14,8 @@ import fr.inserm.server.tools.MongoSingleton;
 public class AbstractDAO {
 	/**
 	 * get de la DBCollection = table au sens MongoDB<br>
-	 * NB : si la collection nexiste pas, mongodb peut quand meme travailelr dessus et la creera au premier import.
+	 * NB : si la collection nexiste pas, mongodb peut quand meme travailelr
+	 * dessus et la creera au premier import.
 	 * 
 	 * @param collectionName
 	 * @return

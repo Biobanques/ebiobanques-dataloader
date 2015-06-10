@@ -39,8 +39,7 @@ import fr.inserm.tools.StringFileTools;
  */
 public class AnalyzerDossierReception extends AbstractManager {
 
-	static final Logger LOGGER = Logger
-			.getLogger(AnalyzerDossierReception.class);
+	static final Logger LOGGER = Logger.getLogger(AnalyzerDossierReception.class);
 
 	private AnalyzerDossierReception() {
 
@@ -70,14 +69,12 @@ public class AnalyzerDossierReception extends AbstractManager {
 		biobanks = dao.loadAll();
 
 		for (Biobank biobank : biobanks) {
-			LOGGER.info("-analyzing biobank name:"
-					+ biobank.getValue(FieldsEnum.identifier) + ",identifier:"
+			LOGGER.info("-analyzing biobank name:" + biobank.getValue(FieldsEnum.identifier) + ",identifier:"
 					+ biobank.getValue(FieldsEnum.identifier));
 			File[] filesReceveid;
 
 			try {
-				filesReceveid = getFilesOnReception(
-						biobank.getValue(FieldsEnum.folder_reception),
+				filesReceveid = getFilesOnReception(biobank.getValue(FieldsEnum.folder_reception),
 						biobank.getValue(FieldsEnum.folder_done));
 
 				if (filesReceveid != null) {
@@ -85,103 +82,72 @@ public class AnalyzerDossierReception extends AbstractManager {
 						LOGGER.info("aucun fichier a traiter");
 					} else {
 
-						LOGGER.info("-number of files received :"
-								+ filesReceveid.length);
+						LOGGER.info("-number of files received :" + filesReceveid.length);
 						String filesName = "";
 						for (File file : filesReceveid) {
 							filesName += "<li>" + file.getName() + "</li>";
 						}
 						// envoi de mail pour demarrage de traitement à l admin
-						MailTools.sendMailNotifyStart(time,
-								filesReceveid.length, filesName);
+						MailTools.sendMailNotifyStart(time, filesReceveid.length, filesName);
 						List<String> filesNames = new ArrayList<String>();
 						List<String> filesSaved = new ArrayList<String>();
 						List<String> filesUnsaved = new ArrayList<String>();
 						List<String> logsFiles = new ArrayList<String>();
 						String prefixName = "ACK_" + time + "_";
 						for (File file : filesReceveid) {
-							LOGGER.info("traitement fichier : - "
-									+ file.getName());
+							LOGGER.info("traitement fichier : - " + file.getName());
 							if (file.isFile()) {
 								filesNames.add(file.getName());
 								// si le type de fichier est autre que .xml,ou
 								// .encrypted, ou si .encrypted mais pas de
 								// .xml dans le nom, deplace dans logs
-								if ((!file.getName().endsWith(".xml")
-										&& !file.getName().endsWith(
-												".encrypted") || file.getName()
-										.endsWith(".encrypted")
-										&& !file.getName().contains(".xml"))
+								if ((!file.getName().endsWith(".xml") && !file.getName().endsWith(".encrypted") || file
+										.getName().endsWith(".encrypted") && !file.getName().contains(".xml"))
 
 								) {
-									LOGGER.info("Fichier non valide : "
-											+ file.getName());
+									LOGGER.info("Fichier non valide : " + file.getName());
 									logsFiles.add(file.getName());
-									StringFileTools.moveFile(file, biobank
-											.getValue(FieldsEnum.folder_done),
-											"log_" + prefixName);
+									StringFileTools.moveFile(file, biobank.getValue(FieldsEnum.folder_done), "/log_"
+											+ prefixName);
 
 								} else {
 									try {
-										anomalies
-												.addAll(injectDataFile(
-														file,
-														prefixName,
-														biobank.getValue(FieldsEnum.passphrase)));
+										anomalies.addAll(injectDataFile(file, prefixName,
+												biobank.getValue(FieldsEnum.passphrase)));
 										// deplacement dans saved
 										filesSaved.add(file.getName());
 
-										StringFileTools
-												.moveFile(
-														file,
-														biobank.getValue(FieldsEnum.folder_done),
-														"saved_" + prefixName);
+										StringFileTools.moveFile(file, biobank.getValue(FieldsEnum.folder_done),
+												"/saved_" + prefixName);
 									} catch (Exception e) {
-										filesUnsaved.add(file.getName()
-												+ "(Error:IOException> )");
+										filesUnsaved.add(file.getName() + "(Error:IOException> )");
 										// deplacement dans repo unsaved
-										StringFileTools
-												.moveFile(
-														file,
-														biobank.getValue(FieldsEnum.folder_done),
-														"unsaved_" + prefixName);
-										anomalies.add(new AnomalieBean(
-												LevelAnomalie.error,
-												"Fichier non injecté car Exception:"
-														+ e.getMessage()
-														+ " on"
-														+ file.getName(),
-												FunctionalObjectType.file));
+										StringFileTools.moveFile(file, biobank.getValue(FieldsEnum.folder_done),
+												"/unsaved_" + prefixName);
+										anomalies.add(new AnomalieBean(LevelAnomalie.error,
+												"Fichier non injecté car Exception:" + e.getMessage() + " on"
+														+ file.getName(), FunctionalObjectType.file));
 									}
 								}
 							}
 							if (file.isDirectory()) {
-								LOGGER.warn("il y a un dossier qui traine dans le repertoire!! ->:"
-										+ file.getName());
+								LOGGER.warn("il y a un dossier qui traine dans le repertoire!! ->:" + file.getName());
 							}
 							getFileDetectedDao().remove(file.getName());
-							LOGGER.debug("-->fin traitement fichier : - "
-									+ file.getName());
+							LOGGER.debug("-->fin traitement fichier : - " + file.getName());
 
 						}
-						EchantillonManager.purgeEchantillon(biobank
-								.getValue(FieldsEnum.id));
+						EchantillonManager.purgeEchantillon(biobank.getValue(FieldsEnum.id));
 						// calcul temps de traitement
 						Date dateFin = new Date();
 						long millis = dateFin.getTime() - date.getTime();
-						String tempsTraitement = String
-								.format("%d min, %d sec",
-										TimeUnit.MILLISECONDS.toMinutes(millis),
-										TimeUnit.MILLISECONDS.toSeconds(millis)
-												- TimeUnit.MINUTES
-														.toSeconds(TimeUnit.MILLISECONDS
-																.toMinutes(millis)));
+						String tempsTraitement = String.format("%d min, %d sec",
+								TimeUnit.MILLISECONDS.toMinutes(millis), TimeUnit.MILLISECONDS.toSeconds(millis)
+										- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
 						// envoi de fmail pour fin de traitement a l admin et au
 						// user
-						MailTools.sendMailNotifyEnd(time, tempsTraitement,
-								anomalies,
-								biobank.getValue(FieldsEnum.identifier),
-								filesReceveid.length, filesNames, filesSaved,
+						MailTools.sendMailNotifyEnd(time, tempsTraitement, anomalies,
+								biobank.getValue(FieldsEnum.identifier), filesReceveid.length, filesNames, filesSaved,
 								filesUnsaved, logsFiles, nbech);
 
 					}
@@ -207,24 +173,20 @@ public class AnalyzerDossierReception extends AbstractManager {
 	 * @throws JDOMException
 	 * @throws BadFormatInsermFileException
 	 */
-	public static List<AnomalieBean> injectDataFile(File file,
-			String prefixName, String decryptePassPhrase) throws JDOMException,
-			IOException, BadFormatInsermFileException {
+	public static List<AnomalieBean> injectDataFile(File file, String prefixName, String decryptePassPhrase)
+			throws JDOMException, IOException, BadFormatInsermFileException {
 		List<AnomalieBean> errors = new ArrayList<AnomalieBean>();
-		if (file.getName().endsWith(".xml")
-				|| file.getName().endsWith(".encrypted")) {
+		if (file.getName().endsWith(".xml") || file.getName().endsWith(".encrypted")) {
 			FileInputXML xmlBean = null;
 			try {
-				xmlBean = FormatXMLParser.convertXml2Bean(file,
-						decryptePassPhrase);
+				xmlBean = FormatXMLParser.convertXml2Bean(file, decryptePassPhrase);
 				nbech += xmlBean.getEchantillons().size();
 
 			} catch (Exception e) {
 				LOGGER.warn("le fichier recu n est pas convertible en bean");
 
-				errors.add(new AnomalieBean(LevelAnomalie.error,
-						"le fichier recu n est pas convertible en bean"
-								+ e.getMessage(), FunctionalObjectType.file));
+				errors.add(new AnomalieBean(LevelAnomalie.error, "le fichier recu n est pas convertible en bean"
+						+ e.getMessage(), FunctionalObjectType.file));
 			}
 			if (xmlBean != null) {
 
@@ -233,16 +195,12 @@ public class AnalyzerDossierReception extends AbstractManager {
 				errors.addAll(FormatXMLParser.saveFileInput(xmlBean));
 			} else {
 				LOGGER.warn("pas de donnes a enregistrer!");
-				errors.add(new AnomalieBean(
-						LevelAnomalie.error,
-						"le fichier recu n est pas un fichier xml, suffixe incorrect",
-						FunctionalObjectType.file));
+				errors.add(new AnomalieBean(LevelAnomalie.error,
+						"le fichier recu n est pas un fichier xml, suffixe incorrect", FunctionalObjectType.file));
 			}
 		} else {
-			errors.add(new AnomalieBean(
-					LevelAnomalie.error,
-					"le fichier recu n est pas un fichier xml, suffixe incorrect",
-					FunctionalObjectType.file));
+			errors.add(new AnomalieBean(LevelAnomalie.error,
+					"le fichier recu n est pas un fichier xml, suffixe incorrect", FunctionalObjectType.file));
 		}
 		return errors;
 	}
@@ -283,11 +241,11 @@ public class AnalyzerDossierReception extends AbstractManager {
 	 * @return
 	 * @throws FolderInexistException
 	 */
-	public static File[] getFilesOnReception(String pathFolderReception,
-			String pathFolderDone) throws FolderInexistException {
+	public static File[] getFilesOnReception(String pathFolderReception, String pathFolderDone)
+			throws FolderInexistException {
 		if (pathFolderReception == null || pathFolderDone == null) {
-			LOGGER.error("folder null for pathFolderReception:"
-					+ pathFolderReception + ", pathFolderDone" + pathFolderDone);
+			LOGGER.error("folder null for pathFolderReception:" + pathFolderReception + ", pathFolderDone"
+					+ pathFolderDone);
 			throw new FolderInexistException();
 		}
 		File folder = new File(pathFolderReception);
@@ -301,8 +259,7 @@ public class AnalyzerDossierReception extends AbstractManager {
 
 			if (f.getName().endsWith(".gz")) {
 				GZIPCompress.uncompress(f);
-				StringFileTools.moveFile(f, pathFolderDone, "ARC_GZ_" + time
-						+ "_");
+				StringFileTools.moveFile(f, pathFolderDone, "ARC_GZ_" + time + "_");
 				// f.delete();
 			}
 		}

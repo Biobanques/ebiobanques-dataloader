@@ -16,7 +16,8 @@ import fr.inserm.server.model.FileImported;
  */
 public class FileImportedManager extends AbstractManager {
 
-	private final static Logger LOGGER = Logger.getLogger(FileImportedManager.class);
+	private final static Logger LOGGER = Logger
+			.getLogger(FileImportedManager.class);
 
 	/**
 	 * return id import. TODO completer avec plus de valeurs.
@@ -24,7 +25,8 @@ public class FileImportedManager extends AbstractManager {
 	 * @param input
 	 * @return
 	 */
-	public static String addFileImported(FileInputXML input) throws NoSiteFoundException {
+	public static String addFileImported(FileInputXML input)
+			throws NoSiteFoundException {
 		String result = "0";
 		if (input.getSite() == null) {
 			LOGGER.warn("site mandatory");
@@ -34,12 +36,18 @@ public class FileImportedManager extends AbstractManager {
 				throw new NoSiteFoundException();
 			} else {
 				FileImported pojo = new FileImported();
-				pojo.setValue(FileImported.FieldsEnum.date_import, input.getDateImport().toString());
-				pojo.setValue(FileImported.FieldsEnum.version_format, input.getFormatVersion() + "");
-				pojo.setValue(FileImported.FieldsEnum.given_name, input.getNameFile());
-				pojo.setValue(FileImported.FieldsEnum.generated_name, input.getGeneratedName());
-				pojo.setValue(FileImported.FieldsEnum.extraction_id, input.getExtractionId());
-				pojo.setValue(FileImported.FieldsEnum.biobank_id, input.getSite().getId() + "");
+				pojo.setValue(FileImported.FieldsEnum.date_import, input
+						.getDateImport().toString());
+				pojo.setValue(FileImported.FieldsEnum.version_format,
+						input.getFormatVersion() + "");
+				pojo.setValue(FileImported.FieldsEnum.given_name,
+						input.getNameFile());
+				pojo.setValue(FileImported.FieldsEnum.generated_name,
+						input.getGeneratedName());
+				pojo.setValue(FileImported.FieldsEnum.extraction_id,
+						input.getExtractionId());
+				pojo.setValue(FileImported.FieldsEnum.biobank_id, input
+						.getSite().getId() + "");
 				pojo.setValue(FileImported.FieldsEnum.suffix_type, 1 + "");
 				result = getFileImportedDao().save(pojo);
 			}
@@ -71,7 +79,8 @@ public class FileImportedManager extends AbstractManager {
 		if (pojo == null)
 			return null;
 		FileImportedBean bean = new FileImportedBean();
-		bean.setExtractionId(pojo.getValue(FileImported.FieldsEnum.extraction_id));
+		bean.setExtractionId(pojo
+				.getValue(FileImported.FieldsEnum.extraction_id));
 		return bean;
 
 	}

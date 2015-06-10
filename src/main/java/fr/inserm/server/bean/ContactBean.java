@@ -1,7 +1,6 @@
 package fr.inserm.server.bean;
 
-
-public class ContactBean  {
+public class ContactBean {
 
 	private int id;
 

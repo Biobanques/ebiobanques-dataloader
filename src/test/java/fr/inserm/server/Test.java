@@ -51,13 +51,9 @@ public class Test extends AbstractTest {
 				consent = "N";
 			}
 			int idbiobank = i % 2;
-			BasicDBObject doc = new BasicDBObject("id_depositor", "nm_java")
-					.append("id_sample", randomid)
-					.append("consent_ethical", consent)
-					.append("biobank_id", idbiobank)
-					.append("notes",
-							new BasicDBObject("maladie", "alz").append("note2",
-									"352"));
+			BasicDBObject doc = new BasicDBObject("id_depositor", "nm_java").append("id_sample", randomid)
+					.append("consent_ethical", consent).append("biobank_id", idbiobank)
+					.append("notes", new BasicDBObject("maladie", "alz").append("note2", "352"));
 
 			coll.insert(doc);
 		}
@@ -78,10 +74,11 @@ public class Test extends AbstractTest {
 		BasicDBObject query2 = new BasicDBObject("consent_ethical", "N");
 		query2.append("biobank_id", biobankid);
 		DBCursor cursor2 = coll.find(query2);
-		LOGGER.debug("nb  d echa sans consent et de la biobank :"
-				+ cursor2.count());
+		LOGGER.debug("nb  d echa sans consent et de la biobank :" + cursor2.count());
 		Date date2 = new Date();
 		LOGGER.debug("end search:" + date2.toString());
+		cursor.close();
+		cursor2.close();
 	}
 
 	public void removeSamples(int biobankid) {

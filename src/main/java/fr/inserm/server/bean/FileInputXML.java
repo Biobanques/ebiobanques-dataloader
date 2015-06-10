@@ -28,7 +28,7 @@ public class FileInputXML {
 	}
 
 	private Date dateImport;
-	
+
 	private String extractionId;
 
 	private int formatVersion;
@@ -77,5 +77,4 @@ public class FileInputXML {
 		this.extractionId = extractionId;
 	}
 
-	
 }

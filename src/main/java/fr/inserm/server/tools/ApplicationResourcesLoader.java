@@ -20,15 +20,19 @@ public class ApplicationResourcesLoader {
 	private final String version;
 	private final boolean mailActif;
 	private final boolean starttls;
-
 	private final String mongoDatabase;
 	private final String mongoUsername;
 	private final String mongoPassword;
 	private final String mongoPort;
 	private final String mongoUrl;
+	public final boolean sendMailsDuringTests;
 
 	public String getMongoDatabase() {
 		return mongoDatabase;
+	}
+
+	public boolean isSendMailsDuringTests() {
+		return sendMailsDuringTests;
 	}
 
 	public String getMongoUsername() {
@@ -47,38 +51,31 @@ public class ApplicationResourcesLoader {
 		return mongoUrl;
 	}
 
-	private static final Logger LOGGER = Logger
-			.getLogger(ApplicationResourcesLoader.class);
+	private static final Logger LOGGER = Logger.getLogger(ApplicationResourcesLoader.class);
 
 	public ApplicationResourcesLoader() {
 		Properties resourcesProps = new Properties();
 		try {
-			resourcesProps.load(this.getClass().getClassLoader()
-					.getResourceAsStream("application.properties"));
+			resourcesProps.load(this.getClass().getClassLoader().getResourceAsStream("application.properties"));
 		} catch (IOException e) {
 			LOGGER.error("pb loading application.properties" + e.getMessage());
 		}
 		mongoUrl = resourcesProps.getProperty("application.mongo.url");
 		mongoDatabase = resourcesProps.getProperty("application.mongo.db");
-		mongoUsername = resourcesProps
-				.getProperty("application.mongo.username");
+		mongoUsername = resourcesProps.getProperty("application.mongo.username");
 		mongoPort = resourcesProps.getProperty("application.mongo.port");
-		mongoPassword = resourcesProps
-				.getProperty("application.mongo.password");
+		mongoPassword = resourcesProps.getProperty("application.mongo.password");
 
 		serverSmtp = resourcesProps.getProperty("application.server.smtp");
 		smtpEmail = resourcesProps.getProperty("application.server.smtp.email");
-		smtpUsername = resourcesProps
-				.getProperty("application.server.smtp.username");
+		smtpUsername = resourcesProps.getProperty("application.server.smtp.username");
 		smtpPass = resourcesProps.getProperty("application.server.smtp.pass");
 		emailAdmin = resourcesProps.getProperty("emailAdmin");
 		setEmailTest(resourcesProps.getProperty("emailTest"));
 		version = resourcesProps.getProperty("dataloader.version");
-		mailActif = resourcesProps.getProperty("mail.actif").equals("true") ? true
-				: false;
-		starttls = resourcesProps.getProperty(
-				"application.server.smtp.starttls.enable").equals("true") ? true
-				: false;
+		mailActif = resourcesProps.getProperty("mail.actif").equals("true") ? true : false;
+		starttls = resourcesProps.getProperty("application.server.smtp.starttls.enable").equals("true") ? true : false;
+		sendMailsDuringTests = resourcesProps.getProperty("sendMailsDuringTests").equals("true") ? true : false;
 	}
 
 	public String getVersion() {

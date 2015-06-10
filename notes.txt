@@ -12,5 +12,5 @@ export JAVA_HOME=/usr/local/jdk1.7.0/
  
 
  
- -- tester la couverture de code avec cobertura
- mvn clean cobertura:cobertura
+ -- tester la couverture de code avec emma
+ mvn clean emma:emma

@@ -35,7 +35,8 @@ public class EchantillonDAO extends AbstractDAO {
 	public AnomalieBean save(Echantillon echantillon) {
 		AnomalieBean result = null;
 		if (echantillon == null) {
-			result = new AnomalieBean(LevelAnomalie.minor, "Pb de sauvegarde d echantillon, echantillon null",
+			result = new AnomalieBean(LevelAnomalie.minor,
+					"Pb de sauvegarde d echantillon, echantillon null",
 					FunctionalObjectType.sample, new Date());
 			LOGGER.error("echantillon is null");
 			return result;
@@ -44,7 +45,8 @@ public class EchantillonDAO extends AbstractDAO {
 		if (echantillon.getValue(Echantillon.Fields.id_sample) == null
 				|| echantillon.getValue(Echantillon.Fields.id_sample).isEmpty()) {
 			LOGGER.error("echantillon sans id provenant du site emetteur donc incorrect pour la tracabilite");
-			result = new AnomalieBean(LevelAnomalie.minor, "Echantillon non sauvegardé : pas d'identifiant défini",
+			result = new AnomalieBean(LevelAnomalie.minor,
+					"Echantillon non sauvegardé : pas d'identifiant défini",
 					FunctionalObjectType.field, new Date());
 			return result;
 		}
@@ -96,7 +98,8 @@ public class EchantillonDAO extends AbstractDAO {
 			return false;
 		}
 		DBCollection coll = getCollection(collectionName);
-		BasicDBObject query = new BasicDBObject(Echantillon.Fields.file_imported_id.toString(), fileId);
+		BasicDBObject query = new BasicDBObject(
+				Echantillon.Fields.file_imported_id.toString(), fileId);
 		try {
 			coll.remove(query);
 		} catch (MongoException me) {

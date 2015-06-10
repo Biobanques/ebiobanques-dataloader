@@ -35,6 +35,7 @@ public class EchantillonTest extends AbstractTest {
 		Echantillon ech = new Echantillon();
 		String val = "N";
 		ech.setValue(Echantillon.Fields.associated_clinical_data, val);
-		assertEquals(ech.getValue(Echantillon.Fields.associated_clinical_data), val);
+		assertEquals(ech.getValue(Echantillon.Fields.associated_clinical_data),
+				val);
 	}
 }

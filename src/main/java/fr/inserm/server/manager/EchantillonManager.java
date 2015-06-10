@@ -23,10 +23,12 @@ import fr.inserm.server.model.FileImported;
  */
 public class EchantillonManager extends AbstractManager {
 
-	private static final Logger LOGGER = Logger.getLogger(EchantillonManager.class);
+	private static final Logger LOGGER = Logger
+			.getLogger(EchantillonManager.class);
 
 	/**
-	 * ajout d echantillone en base. return AnomalieBean if problem return null if ok
+	 * ajout d echantillone en base. return AnomalieBean if problem return null
+	 * if ok
 	 * 
 	 * @param xmlBean
 	 * @param fileId
@@ -34,7 +36,8 @@ public class EchantillonManager extends AbstractManager {
 	 *            site uploading data.
 	 * @return an anomalieBean if add echantillon failed,else null
 	 */
-	public static AnomalieBean addEchantillon(EchantillonBean bean, String fileId, String biobankId) {
+	public static AnomalieBean addEchantillon(EchantillonBean bean,
+			String fileId, String biobankId) {
 		AnomalieBean result = null;
 		Echantillon pojo = null;
 		if (bean == null)
@@ -42,18 +45,22 @@ public class EchantillonManager extends AbstractManager {
 		try {
 			pojo = beanToPojo(bean);
 			if (pojo != null) {
-				pojo.setValue(Echantillon.Fields.file_imported_id.toString(), fileId);
-				pojo.setValue(Echantillon.Fields.biobank_id.toString(), biobankId);
+				pojo.setValue(Echantillon.Fields.file_imported_id.toString(),
+						fileId);
+				pojo.setValue(Echantillon.Fields.biobank_id.toString(),
+						biobankId);
 				getEchantillonDao().save(pojo);
 			} else {
 				LOGGER.debug("Echantillon non sauvegardé, verifier les champs obligatoires");
-				result = new AnomalieBean(LevelAnomalie.minor, "Echantillon non sauvegardé",
+				result = new AnomalieBean(LevelAnomalie.minor,
+						"Echantillon non sauvegardé",
 						FunctionalObjectType.sample, new Date());
 				return result;
 			}
 		} catch (Exception e) {
 			LOGGER.debug("Pb de sauvegarde d echantillon" + e.getMessage());
-			result = new AnomalieBean(LevelAnomalie.minor, "Pb de sauvegarde d echantillon" + e.getMessage(),
+			result = new AnomalieBean(LevelAnomalie.minor,
+					"Pb de sauvegarde d echantillon" + e.getMessage(),
 					FunctionalObjectType.sample, new Date());
 		}
 		return result;
@@ -77,14 +84,16 @@ public class EchantillonManager extends AbstractManager {
 			}
 			pojo.setNotes(bean.getNotes());
 		} catch (Exception e) {
-			LOGGER.error("ERREUR - l'echantillon est null en raison d'une erreur de parsing" + e.getMessage());
+			LOGGER.error("ERREUR - l'echantillon est null en raison d'une erreur de parsing"
+					+ e.getMessage());
 			return null;
 		}
 		return pojo;
 	}
 
 	/**
-	 * delete for a biobank all samples not in the last import FIXME gerer le mecanisme d id unique
+	 * delete for a biobank all samples not in the last import FIXME gerer le
+	 * mecanisme d id unique
 	 * 
 	 * @param biobankId
 	 * @return true if purge correcte si error then false
@@ -101,15 +110,25 @@ public class EchantillonManager extends AbstractManager {
 				LOGGER.debug("Pas de précédent import pour cette biobanque.");
 			} else {
 				String lastExtId = lastImport.getExtractionId();
-				LOGGER.debug("biobank:" + biobankId + "extraction id " + lastExtId + "remove file : ");
-				LOGGER.debug("Début de suppression des anciennes données." + lastExtId);
-				List<FileImported> listOldImport = getFileImportedDao().getFilesImportedByBiobankExceptExtractionId(
-						biobankId, lastExtId);
+				LOGGER.debug("biobank:" + biobankId + "extraction id "
+						+ lastExtId + "remove file : ");
+				LOGGER.debug("Début de suppression des anciennes données."
+						+ lastExtId);
+				List<FileImported> listOldImport = getFileImportedDao()
+						.getFilesImportedByBiobankExceptExtractionId(biobankId,
+								lastExtId);
 				if (listOldImport != null && listOldImport.size() > 0) {
 					for (FileImported toRemove : listOldImport) {
-						LOGGER.debug("biobank:" + biobankId + "extraction id " + lastExtId + "remove file : "
-								+ toRemove.getValue(FileImported.FieldsEnum.id.toString()));
-						getEchantillonDao().removeByFileId(toRemove.getValue(FileImported.FieldsEnum._id.toString()));
+						LOGGER.debug("biobank:"
+								+ biobankId
+								+ "extraction id "
+								+ lastExtId
+								+ "remove file : "
+								+ toRemove.getValue(FileImported.FieldsEnum.id
+										.toString()));
+						getEchantillonDao().removeByFileId(
+								toRemove.getValue(FileImported.FieldsEnum._id
+										.toString()));
 					}
 				}
 				LOGGER.debug("Les anciennes données ont bien été supprimées");

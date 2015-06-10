@@ -27,10 +27,12 @@ public class EchantillonManagerTest extends AbstractTest {
 		FileImportedDAO daof = new FileImportedDAO();
 		biobankId = "5";
 		FileImported fi = daof.getLastFileImported("" + biobankId);
-		assertNull(EchantillonManager.addEchantillon(bean, fi.getValue(FieldsEnum._id), biobankId));
+		assertNull(EchantillonManager.addEchantillon(bean,
+				fi.getValue(FieldsEnum._id), biobankId));
 		bean = new EchantillonBean();
 		bean.addValue(FormatDefinition.id_sample, "6667777");
-		assertNull(EchantillonManager.addEchantillon(bean, fi.getValue(FieldsEnum._id), biobankId));
+		assertNull(EchantillonManager.addEchantillon(bean,
+				fi.getValue(FieldsEnum._id), biobankId));
 	}
 
 	/**

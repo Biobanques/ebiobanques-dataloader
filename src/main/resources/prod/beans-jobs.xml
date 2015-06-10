@@ -69,7 +69,7 @@
 	<bean id="checkReceptionFoldersTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="checkReceptionFoldersJob" />
 
-		<property name="cronExpression" value="0/30 * * * * ? *" />
+		<property name="cronExpression" value="0 0/5 * * * ? *" />
 	</bean>
 
 	<!-- Jobs -->

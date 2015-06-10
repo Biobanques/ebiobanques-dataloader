@@ -3,7 +3,8 @@ package fr.inserm.server.model;
 import java.util.HashMap;
 
 /**
- * classe abstraite pour model type mongodb avec liste de champs sous form d enum.
+ * classe abstraite pour model type mongodb avec liste de champs sous form d
+ * enum.
  * 
  * @author nmalservet
  * 

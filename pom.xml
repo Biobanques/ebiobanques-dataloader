@@ -5,7 +5,7 @@
 	<artifactId>inserm-dataloader-webapp</artifactId>
 	<packaging>war</packaging>
 	<name>inserm-dataloader-webapp</name>
-	<version>0.9-beta</version>
+	<version>0.9</version>
 	<!-- Shared version number properties -->
 	<properties>
 		<org.springframework.version>4.0.0.RELEASE</org.springframework.version>
